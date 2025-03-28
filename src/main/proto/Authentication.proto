@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package com.codecon.infrastructure.grpc.authentication;
+import "google/protobuf/empty.proto";
+
+option java_multiple_files = true;
+
+message SignUpRequest {
+  string first_name = 1;
+  string last_name = 2;
+  string password = 3;
+  string email = 4;
+}
+
+message SignInRequest {
+  string password = 1;
+  string email = 2;
+}
+
+message TokenResponse {
+  string token = 1;
+}
+
+enum ClientPermission {
+  MASTER = 0;
+  USER = 1;
+  ADMIN = 2;
+}
+
+message ClientResponseDto {
+  int64 id = 1;
+  string email = 2;
+  ClientPermission clientPermission = 3;
+}
+
+message TokenRequest {
+  string token = 1;
+}
+
+service AuthenticationService {
+  rpc SignUp(SignUpRequest) returns (google.protobuf.Empty);
+  rpc SignIn(SignInRequest) returns (TokenResponse);
+  rpc GetActualDataByToken(TokenRequest) returns (ClientResponseDto);
+}

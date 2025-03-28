@@ -1,0 +1,6 @@
+<dataset>
+    <example id="1" example_long="100" example_string="example"/>
+    <example id="2" example_long="100" example_string="example"/>
+    <example id="3" example_long="100" example_string="exampld2e"/>
+
+</dataset>
