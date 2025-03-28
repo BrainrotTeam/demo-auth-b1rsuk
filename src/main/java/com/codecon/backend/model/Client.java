@@ -32,7 +32,6 @@ public class Client implements BaseModel {
     @NotBlank(message = "last_name cannot be blank")
     String lastName;
 
-    boolean isActivated = false;
     boolean isBanned = false;
 
     @Email(message = "Email is invalid")

@@ -38,7 +38,7 @@ message TokenRequest {
 }
 
 service AuthenticationService {
-  rpc SignUp(SignUpRequest) returns (google.protobuf.Empty);
+  rpc SignUp(SignUpRequest) returns (TokenResponse);
   rpc SignIn(SignInRequest) returns (TokenResponse);
   rpc GetActualDataByToken(TokenRequest) returns (ClientResponseDto);
 }

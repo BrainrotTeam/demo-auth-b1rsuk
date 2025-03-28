@@ -26,12 +26,17 @@ public class AuthenticationServer extends AuthenticationServiceGrpc.Authenticati
     ClientService clientService;
 
     @Override
-    public void signUp(SignUpRequest signUpRequest, StreamObserver<Empty> emptyStreamObserver) {
+    public void signUp(SignUpRequest signUpRequest, StreamObserver<TokenResponse> emptyStreamObserver) {
         GrpcInvoker.executeSingleGrpcCall(() -> {
             SignUpDto signUpDto = new SignUpDto(signUpRequest);
-            authenticationService.signUp(signUpDto);
 
-            return Empty.newBuilder().build();
+            TokenDto tokenDto = authenticationService.signUp(signUpDto);
+            String token = tokenDto.getToken();
+
+            return TokenResponse
+                    .newBuilder()
+                    .setToken(token)
+                    .build();
         }, emptyStreamObserver);
     }
 

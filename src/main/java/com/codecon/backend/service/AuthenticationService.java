@@ -22,7 +22,7 @@ public class AuthenticationService {
 
     ClientService clientService;
 
-    public void signUp(SignUpDto signUpDto) {
+    public TokenDto signUp(SignUpDto signUpDto) {
         validateAuthenticationData(signUpDto);
 
         String password = signUpDto.getPassword();
@@ -34,14 +34,16 @@ public class AuthenticationService {
         client.setLastName(signUpDto.getLastName());
         client.setHashedPassword(hashedPassword);
 
-        clientService.create(client);
+        Client createdClient = clientService.create(client);
+        ClientDto clientDto = createdClient.toDto();
+
+        return new TokenDto(clientDto);
     }
 
     public TokenDto signIn(SignInDto signInDto) {
         String email = signInDto.getEmail();
         Client clientByEmail = clientService.findClientByEmail(email);
 
-        ensureClientActivated(clientByEmail);
         ensureClientIsNotBanned(clientByEmail);
 
         String hashedPassword = clientByEmail.getHashedPassword();
@@ -49,12 +51,6 @@ public class AuthenticationService {
 
         ClientDto clientDto = clientByEmail.toDto();
         return new TokenDto(clientDto);
-    }
-
-    private void ensureClientActivated(Client clientByEmail) {
-        if (!clientByEmail.isActivated()) {
-            throw new ClientInactiveException(clientByEmail);
-        }
     }
 
     private void ensureClientIsNotBanned(Client clientByEmail) {
